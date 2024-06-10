@@ -12,3 +12,5 @@ var Dice = (function() {
 
     return dice;
 });
+
+export default Dice;
