@@ -4,10 +4,10 @@
 ### Fonts
 For this game, we decided to use very minimalist, web-safe fonts like Arial and Courier New. The reason being that the game is quite simple and we want it to be accessible to every machine. This game should not take too long to load and it should be able to easily read.
 
-## Colours
+### Colours
 For colours, we decided to use high-contrasting colours because of accessibility. We made all text black and used a white background for the main game area. The game area is a div itself that stretches only 80% of the width of the screen which allows us to fill the other 20% with a Yahtzee-inspired background that is primarily red.
 
-## Dice
+### Dice
 For the dice, we created our own dice that had rounded corners, a light grey face, and we positioned dots on each face to represent each of the 6 sides of a dice. Every time a player rolled the dice, we would play an animation where the dice would randomly cycle through faces of the dice before settling on the actual rolled value to make the dice less static. Every time a player kept the dice, the dice would be filled green to indicate that it had been locked in. Refer to [dice.js](/public/assets/dice.js) for the back-end implementation of the dice as a module and [dice.html](/public/assets/design_system/dice.html) for the front-end implementation of the dice as it appears in the game.
 
 ## Game Components
