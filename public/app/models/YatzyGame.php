@@ -1,4 +1,6 @@
 <?php
+namespace Yatzy;
+
 class YatzyGame {
     private $round;
     private $diceValues;

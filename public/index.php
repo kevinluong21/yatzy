@@ -1,7 +1,7 @@
 <?php
 require_once('_config.php');
 
-use YatzyGame;
+use Yatzy\YatzyGame;
 
 $game = new YatzyGame();
 

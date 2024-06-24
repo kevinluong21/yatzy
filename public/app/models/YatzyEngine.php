@@ -1,4 +1,6 @@
 <?php
+namespace Yatzy;
+
 class YatzyEngine {
     private $totalScore;
     private $upperScore;

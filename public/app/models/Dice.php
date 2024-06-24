@@ -1,12 +1,17 @@
 <?php
-class Dice {
+namespace Yatzy;
 
-    //default constructor
-    public function __construct() {
+class Dice {
+    private $min;
+    private $max;
+
+    public function __construct($min = 1, $max = 6) { //default min is 1 and max is 6
+        $this->min = $min;
+        $this->max = $max;
     }
 
     public function roll() {
-        return rand(0, 6); //assume a die always has 6 sides
+        return rand($this->min, $this->max);
     }
 }
 ?>
