@@ -17,15 +17,15 @@ body {
     align-items: center;
 }
 
-.die {
+.gameboard {
     width: 100%;
 }
 
-.die th {
+.gameboard th {
     text-align: left;
 }
 
-.die td {
+.gameboard td {
     width: calc(100%/5);
 }
 
@@ -61,4 +61,8 @@ body {
     width: 50%;
     height: 100%;
     float: right;
+}
+
+.score-categories {
+    padding: 5%;
 }

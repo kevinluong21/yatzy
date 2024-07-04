@@ -115,14 +115,43 @@ function generateFace(face) {
 }
 
 function roll(i) {
-    var face = Math.floor(Math.random() * 6 + 1); //generate a random number
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+
+        }
+    };
     dice[i].innerHTML = generateFace(face);
 }
 
+function keep(i) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+
+        }
+    };
+}
 
 //onload set all dice faces to show 1
 window.onload = function() {
-    for (let i = 0; i < dice.length; i++) {
-        dice[i].innerHTML = generateFace(1);
-    }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            try {
+                var response = JSON.parse(this.responseText);
+                face = response["diceValues"];
+
+                for (let i = 0; i < 5; i++) {
+                    dice[i].innerHTML = generateFace(face[i]);
+                }
+            }
+            catch (error) {
+                console.log("Server-side error", error);
+            }
+        }
+    };
+
+    xhttp.open("POST", "app/models/session.php", true);
+    xhttp.send();
 };

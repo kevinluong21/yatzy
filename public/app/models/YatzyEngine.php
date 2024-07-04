@@ -1,6 +1,10 @@
 <?php
 namespace Yatzy;
 
+require "YatzyGame";
+
+use Yatzy\YatzyGame;
+
 class YatzyEngine {
     private $totalScore;
     private $upperScore;

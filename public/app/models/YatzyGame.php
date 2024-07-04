@@ -1,6 +1,10 @@
 <?php
 namespace Yatzy;
-Use Dice;
+
+require "Dice.php";
+
+use Yatzy\Dice;
+use Error;
 
 class YatzyGame {
     private $round;
@@ -10,19 +14,9 @@ class YatzyGame {
     public function __construct() {
         $this->round = 0;
 
-        $this->diceValues = [];
-        $i = 0;
-        while ($i < 5) { //fill the array with all 0s
-            $this->diceValues[] = 0;
-            $i++;
-        }
+        $this->diceValues = array_fill(0, 5, 0);
         
-        $this->diceStatus = [];
-        $i = 0;
-        while ($i < 5) { //fill the array wih all "re-roll" (no value was kept yet)
-            $this->diceStatus[] = "re-roll";
-            $i++;
-        }
+        $this->diceStatus = array_fill(0, 5, false);
     }
 
     public function rollDice(){ 
@@ -34,8 +28,8 @@ class YatzyGame {
 
         $i = 0;
         while ($i < 5) {
-            if($this->diceStatus[i]){
-                $this->diceValues[i] = $d->roll()+1;
+            if(!$this->diceStatus[$i]){ //only roll the dice that have a "true" status
+                $this->diceValues[$i] = $d->roll();
             }
             $i++;
         }
