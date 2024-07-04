@@ -1,0 +1,64 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.play-area {
+    width: 50%;
+    height: 100%;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.die {
+    width: 100%;
+}
+
+.die th {
+    text-align: left;
+}
+
+.die td {
+    width: calc(100%/5);
+}
+
+.dice {
+    width: 80%;
+    /* make a perfect square */
+    aspect-ratio: 1/1;
+    background-color: lightgrey;
+    border-radius: 10%;
+    margin: auto;
+}
+
+.dice-face {
+    width: 100%;
+    height: 100%;
+    padding: 5%;
+}
+
+.dice-face td {
+    width: calc(100%/3);
+    height: calc(100%/3);
+}
+
+.dice-dot {
+    width: 80%;
+    aspect-ratio: 1/1;
+    background-color: black;
+    border-radius: 50%;
+    margin: auto;
+}
+
+.scoreboard {
+    width: 50%;
+    height: 100%;
+    float: right;
+}
