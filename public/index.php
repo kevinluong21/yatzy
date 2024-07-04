@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yatzy by JK</title>
-    <link href="styles.css" rel="stylesheet" type="text/css">
+    <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
     <div class="play-area">
@@ -15,39 +15,33 @@
             <tr>
                 <td>
                     <div class="dice">
-                    <!-- to import a php file, only use require once -->
-                        <?php require 'app/views/DiceFace.php';
-                            generateFace(1);
-                        ?>
                     </div>
+                    <button onclick='roll(0)'>Roll</button>
+                    <button>Keep</button>
                 </td>
                 <td>
                     <div class="dice">
-                        <?php
-                            generateFace(1);
-                        ?>
                     </div>
+                    <button onclick='roll(1)'>Roll</button>
+                    <button>Keep</button>
                 </td>
                 <td>
                     <div class="dice">
-                        <?php
-                            generateFace(1);
-                        ?>
                     </div>
+                    <button onclick='roll(2)'>Roll</button>
+                    <button>Keep</button>
                 </td>
                 <td>
                     <div class="dice">
-                        <?php
-                            generateFace(1);
-                        ?>
                     </div>
+                    <button onclick='roll(3)'>Roll</button>
+                    <button>Keep</button>
                 </td>
                 <td>
                     <div class="dice">
-                        <?php
-                            generateFace(1);
-                        ?>
                     </div>
+                    <button onclick='roll(4)'>Roll</button>
+                    <button>Keep</button>
                 </td>
             </tr>
         </table>
@@ -71,5 +65,7 @@
             <li>Yatzy: All five dice with the same number. Score: 50 points.</li>
           </ul>          
     </div>
+
+    <script src="script.js" type="text/javascript"></script>
 </body>
 </html>
