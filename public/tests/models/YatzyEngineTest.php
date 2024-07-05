@@ -33,9 +33,9 @@ class YatzyEngineTest extends TestCase
         $game = new YatzyGame();
         $game->totalScore = 200;
         $game->upperScore = 65;
-        $game->totalScore = $e->overallScore($game);
+        $game->totalScore = $e->getTotalScore($game);
         $expectedTotalScore = 235; // 100 + 35 (bonus if upper >= 63) = 235
-        $this->assertEquals($expectedTotalScore, $this->game->overallScore($game));
+        $this->assertEquals($expectedTotalScore, $game->getTotalScore($game));
     }
 }
 ?>

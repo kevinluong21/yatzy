@@ -68,6 +68,10 @@ body {
     float: right;
 }
 
+.score {
+    padding: 5%;
+}
+
 .score-categories {
     padding: 5%;
 }

@@ -1,13 +1,12 @@
 <?php
 namespace Yatzy;
 
-require "YatzyGame";
-
-use Yatzy\YatzyGame;
+use Exception;
 
 class YatzyEngine {
     private $totalScore;
     private $upperScore;
+    const BONUS = 35; //declare a constant for the bonus
 
     public function __construct() {
         $this->totalScore = 0;
@@ -24,6 +23,35 @@ class YatzyEngine {
         return $sum;
     }
 
+    public function sumOfDuplicates($game, $numDuplicates, $groupsOfDuplicates = 1) {
+        //numDuplicates is how many duplicate values (e.g. 2 is a pair)
+        //groupsOfDuplicates is how many different duplicate values are summed together (e.g. 2 pairs means 2 groups of duplicates)
+        $sum = 0;
+        $values = $game -> getDiceValues();
+
+        $frequency = array_count_values($values);
+        krsort($frequency, SORT_NUMERIC); //sort the keys of count in descending order
+
+        $frequency = array_filter($frequency, function($count) use ($numDuplicates) { //filter all values that appear at least numDuplicates times
+            return $count >= $numDuplicates;
+        });
+
+        if (count($frequency) < $groupsOfDuplicates) {
+            return 0;
+        }
+
+        //since the array is already sorted in reverse order, the head is the highest duplicate sum
+        foreach ($frequency as $index => $value) {
+            if ($groupsOfDuplicates == 0) {
+                break;
+            }
+            $sum += $index * $numDuplicates;
+            $groupsOfDuplicates--;
+        }
+
+        return $sum;
+    }
+
     public function sumOfAllDice($game) {
         $sum = 0;
         foreach ($game->getDiceValues() as $val) {
@@ -32,19 +60,23 @@ class YatzyEngine {
         return $sum;
     }
 
-    public function overallScore($game) {
-        $bonus = 0;
+    public function getTotalScore() {
         if ($this->upperScore >= 63) {
-            $bonus = 35;
+            return $this->totalScore + self::BONUS;
         }
 
-        return $this->totalScore + $bonus;
+        return $this->totalScore;
     }
 
-    public function turnScore($game, $scoreBox) {
+    public function turnScore($game, $categoriesPlayed, $scoreCategory) {
+        //if the user already played this category, throw an exception
+        if (in_array($scoreCategory, $categoriesPlayed)) {
+            throw new Exception("Category already played.");
+        }
+
         $score = 0;
 
-        switch ($scoreBox) { // Calculate score based on score box
+        switch ($scoreCategory) { // Calculate score based on score category
             case "ones":
                 $score = $this->sumOfSpecificSide($game, 1);
                 $this->upperScore += $score;
@@ -69,23 +101,40 @@ class YatzyEngine {
                 $score = $this->sumOfSpecificSide($game, 6);
                 $this->upperScore += $score;
                 break;
-            case "three of a kind":
-                $score = $this->sumOfAllDice($game);
+            case "one_pair":
+                $score = $this->sumOfDuplicates($game, 2);
                 break;
-            case "four of a kind":
-                $score = $this->sumOfAllDice($game);
+            case "two_pairs":
+                $score = $this->sumOfDuplicates($game, 2, 2);
                 break;
-            case "full house":
-                $score = 25;
+            case "three_of_a_kind":
+                $score = $this->sumOfDuplicates($game, 3);
                 break;
-            case "small straight":
-                $score = 30;
+            case "four_of_a_kind":
+                $score = $this->sumOfDuplicates($game, 4);
                 break;
-            case "large straight":
-                $score = 40;
+            case "full_house":
+                $values = $game -> getDiceValues();
+                $frequency = array_count_values($values); //count the number of duplicates for each value
+
+                if (in_array(3, $frequency) && in_array(2, $frequency)) { //if there exists a group of 3 duplicates and 2 duplicates
+                    $score = $this->sumOfAllDice($game);
+                }
                 break;
-            case "yahtzee":
-                $score = 50;
+            case "small_straight":
+                $values = $game -> getDiceValues();
+                if ($values == [1, 2, 3, 4, 5]) { //same values regardless of order
+                    $score = 15;
+                }
+                break;
+            case "large_straight":
+                $values = $game -> getDiceValues();
+                if ($values == [2, 3, 4, 5, 6]) { //same values regardless of order
+                    $score = 20;
+                }
+                break;
+            case "yahtzy":
+                $score = $this->sumOfDuplicates($game, 5);
                 break;
             case "chance":
                 $score = $this->sumOfAllDice($game);

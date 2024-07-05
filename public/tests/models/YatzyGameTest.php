@@ -17,7 +17,7 @@ class YatzyGameTest extends TestCase
         $game = new YatzyGame();
         $game->rollDice();
         $game->resetGame();
-        $this->assertEquals(0, $game->getRound()); 
+        $this->assertEquals(0, $game->getNumRolls()); 
         $this->assertEquals([0, 0, 0, 0, 0], $game->getDiceValues()); 
         $this->assertEquals([false, false, false, false, false], $game->getDiceStatus()); 
     }
