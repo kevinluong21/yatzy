@@ -124,6 +124,7 @@ function update() {
                 var face = response["diceValues"];
                 var status = response["diceStatus"];
                 var categories = response["scoreCategories"];
+                var score = response["totalScore"];
 
                 console.log(response);
 
@@ -140,6 +141,8 @@ function update() {
                 for (let i = 0; i < categories.length; i++) {
                     document.getElementById(categories[i]).setAttribute("disabled", true);
                 }
+
+                document.getElementById("score").innerHTML = score;
             }
             catch (error) {
                 console.log("Server-side error:", error);

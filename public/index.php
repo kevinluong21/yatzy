@@ -55,8 +55,8 @@ $_SESSION["totalScore"] = 0;
         </div>
     </div>
     <div class="scoreboard">
-        <div class="score">
-            Your Score:
+        <div class="scorebox">
+            Your Score: <span id="score"></span>
         </div>
         <table class="score-categories">
             <tr>
