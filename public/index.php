@@ -19,33 +19,34 @@ $_SESSION["game"] = $game;
 </head>
 <body>
     <div class="play-area">
-        <table class="gameboard">
-            <tr>
-                <th colspan="5">Round 1</th>
-            </tr>
-            <tr>
-                <td>
-                    <div class="dice"></div>
-                    <button>Keep</button>
-                </td>
-                <td>
-                    <div class="dice"></div>
-                    <button>Keep</button>
-                </td>
-                <td>
-                    <div class="dice"></div>
-                    <button>Keep</button>
-                </td>
-                <td>
-                    <div class="dice"></div>
-                    <button>Keep</button>
-                </td>
-                <td>
-                    <div class="dice"></div>
-                    <button>Keep</button>
-                </td>
-            </tr>
-        </table>
+        <div class="round">
+            <h1>Round 1</h1>
+            <table class="gameboard">
+                <tr>
+                    <td>
+                        <div class="dice"></div>
+                        <button onclick="keep(0)">Keep</button>
+                    </td>
+                    <td>
+                        <div class="dice"></div>
+                        <button onclick="keep(1)">Keep</button>
+                    </td>
+                    <td>
+                        <div class="dice"></div>
+                        <button onclick="keep(2)">Keep</button>
+                    </td>
+                    <td>
+                        <div class="dice"></div>
+                        <button onclick="keep(3)">Keep</button>
+                    </td>
+                    <td>
+                        <div class="dice"></div>
+                        <button onclick="keep(4)">Keep</button>
+                    </td>
+                </tr>
+            </table>
+            <button onclick="roll()">Re-roll</button>
+        </div>
     </div>
     <div class="scoreboard">
         <div class="score"></div>
