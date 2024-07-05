@@ -17,6 +17,7 @@ if (isset($_POST["action"]) && $_POST["action"] == "getGameStatus") {
     $response["diceStatus"] = $_SESSION["game"] -> getDiceStatus();
     $response["scoreCategories"] = $_SESSION["categories"];
     $response["totalScore"] = $_SESSION["totalScore"];
+    $response["rolls"] = $_SESSION["game"] -> getNumRolls();
 }
 
 if (isset($_POST["action"]) && $_POST["action"] == "rollDice") { //roll all dice that have a status of false

@@ -57,6 +57,8 @@ $_SESSION["totalScore"] = 0;
     <div class="scoreboard">
         <div class="scorebox">
             Your Score: <span id="score"></span>
+            <br>
+            Rolls Left For This Round: <span id="rolls"></span>
         </div>
         <table class="score-categories">
             <tr>

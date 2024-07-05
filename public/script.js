@@ -125,6 +125,7 @@ function update() {
                 var status = response["diceStatus"];
                 var categories = response["scoreCategories"];
                 var score = response["totalScore"];
+                var rollsLeft = 3 - response["rolls"];
 
                 console.log(response);
 
@@ -143,6 +144,7 @@ function update() {
                 }
 
                 document.getElementById("score").innerHTML = score;
+                document.getElementById("rolls").innerHTML = rollsLeft;
             }
             catch (error) {
                 console.log("Server-side error:", error);
