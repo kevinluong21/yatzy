@@ -123,9 +123,11 @@ function update() {
                 var response = JSON.parse(this.responseText);
                 var face = response["diceValues"];
                 var status = response["diceStatus"];
-                var categories = response["scoreCategories"];
+                var categoriesPlayed = response["categoriesPlayed"];
                 var score = response["totalScore"];
                 var rollsLeft = 3 - response["rolls"];
+                var numRounds = response["numRounds"];
+                var pointsToEarn = response["pointsToEarn"];
 
                 console.log(response);
 
@@ -135,19 +137,23 @@ function update() {
 
                 for (let i = 0; i < status.length; i++) {
                     if (status[i]) {
-                        dice[i].style.backgroundColor = "green";
+                        dice[i].style.backgroundColor = "#A5DD9B";
                     }
                 }
 
-                for (let i = 0; i < categories.length; i++) {
-                    document.getElementById(categories[i]).setAttribute("disabled", true);
+                for (let i = 0; i < categoriesPlayed.length; i++) {
+                    document.getElementById(categoriesPlayed[i]).setAttribute("disabled", true);
+                }
+
+                for (let i = 0; i < pointsToEarn.length; i++) {
+                    document.getElementsByClassName("points-to-earn")[i].innerHTML = pointsToEarn[i];
                 }
 
                 document.getElementById("score").innerHTML = score;
                 document.getElementById("rolls").innerHTML = rollsLeft;
             }
             catch (error) {
-                console.log("Server-side error:", error);
+                console.log("Ran into an error while updating:", error);
             }
         }
     };

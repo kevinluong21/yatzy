@@ -6,6 +6,22 @@ require "YatzyEngine.php";
 
 session_start(); //connect to session
 
+$scoreCategories = ["ones", "twos", "threes", "fours", "fives", "sixes", "one_pair", "two_pairs", "three_of_a_kind", "four_of_a_kind",
+"small_straight", "large_straight", "full_house", "chance", "yatzy"];
+
+function calculatePointsToEarn() {
+    $pointsToEarn = [];
+    $game = $_SESSION["game"];
+    $engine = $_SESSION["engine"];
+    $categoriesPlayed = $_SESSION["categoriesPlayed"];
+
+    foreach ($GLOBALS["scoreCategories"] as $category) {
+        $pointsToEarn[] = $engine -> turnScore($game, $categoriesPlayed, $category);
+    }
+
+    return $pointsToEarn;
+}
+
 $response = [];
 
 if (!isset($_SESSION["game"]) || !isset($_SESSION["engine"])) {
@@ -15,9 +31,11 @@ if (!isset($_SESSION["game"]) || !isset($_SESSION["engine"])) {
 if (isset($_POST["action"]) && $_POST["action"] == "getGameStatus") {
     $response["diceValues"] = $_SESSION["game"] -> getDiceValues();
     $response["diceStatus"] = $_SESSION["game"] -> getDiceStatus();
-    $response["scoreCategories"] = $_SESSION["categories"];
+    $response["categoriesPlayed"] = $_SESSION["categoriesPlayed"];
     $response["totalScore"] = $_SESSION["totalScore"];
     $response["rolls"] = $_SESSION["game"] -> getNumRolls();
+    $response["numRounds"] = $_SESSION["numRounds"];
+    $response["pointsToEarn"] = calculatePointsToEarn();
 }
 
 if (isset($_POST["action"]) && $_POST["action"] == "rollDice") { //roll all dice that have a status of false
@@ -37,15 +55,18 @@ if (isset($_POST["action"]) && isset($_POST["category"]) && $_POST["action"] == 
     try {
         $game = $_SESSION["game"];
         $engine = $_SESSION["engine"];
-        $categoriesPlayed = $_SESSION["categories"];
+        $categoriesPlayed = $_SESSION["categoriesPlayed"];
+        $numRounds = $_SESSION["numRounds"];
         $scoreCategory = $_POST["category"];
 
         $_SESSION["totalScore"] = $engine -> turnScore($game, $categoriesPlayed, $scoreCategory);
         $categoriesPlayed[] = $scoreCategory;
+        $game -> keepAllDice(); //once a category is picked, all dice are automatically kept (lcoked from re-rolling)
+        $_SESSION["numRounds"]++; //once a score category is picked, the next round starts
 
         $_SESSION["game"] = $game;
         $_SESSION["engine"] = $engine;
-        $_SESSION["categories"] = $categoriesPlayed;
+        $_SESSION["categoriesPlayed"] = $categoriesPlayed;
     }
     catch (Exception $e) {
         echo $e;

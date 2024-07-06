@@ -23,7 +23,8 @@ body {
 }
 
 .gameboard {
-    width: 100%;
+    width: 90%;
+    margin: auto;
 }
 
 .gameboard th {
@@ -73,5 +74,48 @@ body {
 }
 
 .score-categories {
+    width: 100%;
     padding: 5%;
+}
+
+.score-categories td {
+    width: calc(100%/4);
+    height: calc(100%/4);
+}
+
+.score-category {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background-color: white;
+    border-radius: 5%;
+    border: 1px solid #A5DD9B;
+}
+
+.score-category:disabled {
+    background-color: #A5DD9B;
+}
+
+.score-category:hover {
+    cursor: pointer;
+}
+
+.tooltip {
+    position: relative;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    top: 10%;
+    right: 80%;
+    background-color: rgba(0, 0, 0, 0.85);
+    border-radius: 2.5%;
+    color: white;
+    padding: 5%;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
 }

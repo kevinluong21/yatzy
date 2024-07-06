@@ -123,17 +123,19 @@ class YatzyEngine {
                 break;
             case "small_straight":
                 $values = $game -> getDiceValues();
+                sort($values);
                 if ($values == [1, 2, 3, 4, 5]) { //same values regardless of order
                     $score = 15;
                 }
                 break;
             case "large_straight":
                 $values = $game -> getDiceValues();
+                sort($values);
                 if ($values == [2, 3, 4, 5, 6]) { //same values regardless of order
                     $score = 20;
                 }
                 break;
-            case "yahtzy":
+            case "yatzy":
                 $score = $this->sumOfDuplicates($game, 5);
                 break;
             case "chance":
