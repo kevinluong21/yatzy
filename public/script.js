@@ -1,5 +1,42 @@
 var dice = document.getElementsByClassName("dice");
 
+function addRound(roundNum) {
+    var playArea = document.getElementsByClassName("play-area")[0];
+    var round = document.createElement("div");
+    round.className = "round";
+
+    round.innerHTML = `
+    <h1>Round <span class="round-number">${roundNum}</span></h1>
+    <table class="gameboard">
+        <tr>
+            <td>
+                <div class="dice"></div>
+                <button onclick="keep(0)">Keep</button>
+            </td>
+            <td>
+                <div class="dice"></div>
+                <button onclick="keep(1)">Keep</button>
+            </td>
+            <td>
+                <div class="dice"></div>
+                <button onclick="keep(2)">Keep</button>
+            </td>
+            <td>
+                <div class="dice"></div>
+                <button onclick="keep(3)">Keep</button>
+            </td>
+            <td>
+                <div class="dice"></div>
+                <button onclick="keep(4)">Keep</button>
+            </td>
+        </tr>
+    </table>
+    <button onclick="roll()">Re-roll</button>
+    `;
+
+    playArea.appendChild(round);
+}
+
 function generateFace(face) {
     switch (face) {
         case 1:
@@ -120,6 +157,7 @@ function update() {
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             try {
+                console.log(this.responseText);
                 var response = JSON.parse(this.responseText);
                 var face = response["diceValues"];
                 var status = response["diceStatus"];
@@ -128,6 +166,7 @@ function update() {
                 var rollsLeft = 3 - response["rolls"];
                 var numRounds = response["numRounds"];
                 var pointsToEarn = response["pointsToEarn"];
+                var newRound = response["newRound"];
 
                 console.log(response);
 
@@ -147,6 +186,10 @@ function update() {
 
                 for (let i = 0; i < pointsToEarn.length; i++) {
                     document.getElementsByClassName("points-to-earn")[i].innerHTML = pointsToEarn[i];
+                }
+
+                if (newRound) {
+                    addRound(numRounds);
                 }
 
                 document.getElementById("score").innerHTML = score;

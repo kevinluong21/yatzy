@@ -17,14 +17,19 @@ body {
 
 .round {
     width: 100%;
-    position: absolute;
+    /* position: absolute;
     top: 50%;
-    transform: translate(0, -50%);
+    transform: translate(0, -50%); */
+    padding: 5%;
+}
+
+.round h1 {
+    font-family: Garamond, serif;
 }
 
 .gameboard {
     width: 90%;
-    margin: auto;
+    margin: 0;
 }
 
 .gameboard th {
@@ -71,6 +76,7 @@ body {
 
 .scorebox {
     padding: 5%;
+    font-family: Garamond, serif;
 }
 
 .score-categories {
@@ -89,6 +95,8 @@ body {
     background-color: white;
     border-radius: 5%;
     border: 1px solid #A5DD9B;
+    font-family: Garamond, serif;
+    font-size: 125%;
 }
 
 .score-category:disabled {
@@ -108,12 +116,13 @@ body {
     width: 100%;
     position: absolute;
     z-index: 1;
-    top: 10%;
-    right: 80%;
+    top: 5%;
+    right: 90%;
     background-color: rgba(0, 0, 0, 0.85);
     border-radius: 2.5%;
     color: white;
     padding: 5%;
+    font-family: Garamond, serif;
 }
 
 .tooltip:hover .tooltip-text {

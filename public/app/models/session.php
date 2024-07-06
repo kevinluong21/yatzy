@@ -13,10 +13,9 @@ function calculatePointsToEarn() {
     $pointsToEarn = [];
     $game = $_SESSION["game"];
     $engine = $_SESSION["engine"];
-    $categoriesPlayed = $_SESSION["categoriesPlayed"];
 
     foreach ($GLOBALS["scoreCategories"] as $category) {
-        $pointsToEarn[] = $engine -> turnScore($game, $categoriesPlayed, $category);
+        $pointsToEarn[] = $engine -> turnScore($game, [], $category);
     }
 
     return $pointsToEarn;
@@ -28,7 +27,7 @@ if (!isset($_SESSION["game"]) || !isset($_SESSION["engine"])) {
     throw new Exception("Game or engine is not initialized. No data to return.");
 }
 
-if (isset($_POST["action"]) && $_POST["action"] == "getGameStatus") {
+if (isset($_POST["action"]) && $_POST["action"] == "getGameStatus") { //remember to update to check if the rest are also set!
     $response["diceValues"] = $_SESSION["game"] -> getDiceValues();
     $response["diceStatus"] = $_SESSION["game"] -> getDiceStatus();
     $response["categoriesPlayed"] = $_SESSION["categoriesPlayed"];
@@ -36,6 +35,9 @@ if (isset($_POST["action"]) && $_POST["action"] == "getGameStatus") {
     $response["rolls"] = $_SESSION["game"] -> getNumRolls();
     $response["numRounds"] = $_SESSION["numRounds"];
     $response["pointsToEarn"] = calculatePointsToEarn();
+    $response["newRound"] = $_SESSION["newRound"];
+
+    $_SESSION["newRound"] = false; //reset the flag if it was true
 }
 
 if (isset($_POST["action"]) && $_POST["action"] == "rollDice") { //roll all dice that have a status of false
@@ -63,6 +65,7 @@ if (isset($_POST["action"]) && isset($_POST["category"]) && $_POST["action"] == 
         $categoriesPlayed[] = $scoreCategory;
         $game -> keepAllDice(); //once a category is picked, all dice are automatically kept (lcoked from re-rolling)
         $_SESSION["numRounds"]++; //once a score category is picked, the next round starts
+        $_SESSION["newRound"] = true; //flag to indicate that a new round has started
 
         $_SESSION["game"] = $game;
         $_SESSION["engine"] = $engine;
