@@ -71,7 +71,8 @@ body {
 .scoreboard {
     width: 50%;
     height: 100%;
-    float: right;
+    position: fixed;
+    right: 0;
 }
 
 .scorebox {
