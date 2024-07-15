@@ -13,12 +13,12 @@ $engine = new YatzyEngine();
 
 $_SESSION["game"] = $game; //store the game object to the session
 $_SESSION["engine"] = $engine; //store the engine object to the session
-$_SESSION["numRounds"] = 1;
 $_SESSION["categoriesPlayed"] = []; //store all of the categories that the player selects
 $_SESSION["totalScore"] = 0;
 $_SESSION["upperScore"] = 0;
 $_SESSION["newRound"] = false; //flag to check if a new round has started
-
+$_SESSION["games"] = [];
+$_SESSION["gameOver"] = false;
 ?>
 
 <!DOCTYPE html>

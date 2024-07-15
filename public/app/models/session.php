@@ -4,6 +4,9 @@
 require "YatzyGame.php";
 require "YatzyEngine.php";
 
+use Yatzy\YatzyGame;
+use Yatzy\YatzyEngine;
+
 session_start(); //connect to session
 
 $scoreCategories = ["ones", "twos", "threes", "fours", "fives", "sixes", "one_pair", "two_pairs", "three_of_a_kind", "four_of_a_kind",
@@ -30,6 +33,20 @@ function addRound() { //start a new round by resetting the dice
     $_SESSION["game"] = $game;
 }
 
+function playAgain() {
+    //restart the entire game
+    $game = new YatzyGame();
+    $game -> rollDice(); //on game start, roll the dice
+    $engine = new YatzyEngine();
+
+    $_SESSION["game"] = $game; //store the game object to the session
+    $_SESSION["engine"] = $engine; //store the engine object to the session
+    $_SESSION["categoriesPlayed"] = []; //store all of the categories that the player selects
+    $_SESSION["totalScore"] = 0;
+    $_SESSION["upperScore"] = 0;
+    $_SESSION["newRound"] = false; //flag to check if a new round has started
+}
+
 $response = [];
 
 if (!isset($_SESSION["game"]) || !isset($_SESSION["engine"])) {
@@ -38,9 +55,8 @@ if (!isset($_SESSION["game"]) || !isset($_SESSION["engine"])) {
 
 if (isset($_POST["action"]) && $_POST["action"] == "getGameStatus") { //remember to update to check if the rest are also set!
     $response["newRound"] = $_SESSION["newRound"];
-    
 
-    if ($_SESSION["newRound"]) {
+    if ($_SESSION["newRound"] && !$_SESSION["gameOver"]) {
         addRound();
         $_SESSION["newRound"] = false; //reset the flag if it was true
     }
@@ -54,6 +70,8 @@ if (isset($_POST["action"]) && $_POST["action"] == "getGameStatus") { //remember
     $response["rolls"] = $_SESSION["game"] -> getNumRolls();
     $response["pointsToEarn"] = calculatePointsToEarn();
     $response["numRounds"] = $_SESSION["game"] -> getNumRounds();
+    $response["games"] = $_SESSION["games"];
+    $response["gameOver"] = $_SESSION["gameOver"];
 }
 
 if (isset($_POST["action"]) && $_POST["action"] == "rollDice") { //roll all dice that have a status of false
@@ -90,6 +108,13 @@ if (isset($_POST["action"]) && isset($_POST["category"]) && $_POST["action"] == 
         $_SESSION["game"] = $game;
         $_SESSION["engine"] = $engine;
         $_SESSION["categoriesPlayed"] = $categoriesPlayed;
+
+        if ($game -> getNumRounds() == 15) { //game is over!
+            //once the game is over, add the game score to the list
+            $_SESSION["games"][] = $_SESSION["game"] -> getTotalScore();
+            $_SESSION["gameOver"] = true;
+            $_SESSION["newRound"] = false;
+        }
     }
     catch (Exception $e) {
         echo $e; //make sure to display error message here!!!

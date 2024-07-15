@@ -168,14 +168,12 @@ function update() {
                 var numRounds = response["numRounds"];
                 var pointsToEarn = response["pointsToEarn"];
                 var newRound = response["newRound"];
-
-                console.log(response);
+                var games = response["games"];
+                var gameOver = response["gameOver"];
 
                 if (newRound) {
                     addRound(numRounds); //add a new row of dice for the new round
                 }
-
-                console.log(numRounds);
 
                 for (let i = 0; i < numRounds; i++) {
                     for (let j = 0; j < face[i].length; j++) {
