@@ -151,6 +151,71 @@ function generateFace(face) {
     }
 }
 
+//build a table of all the rounds that the user has played
+function displayAllGames(games) {
+    var popup = document.getElementsByClassName("popup")[0];
+    var gamesTable = document.createElement("table");
+    gamesTable.classList.add("games-table");
+    var gamesLen = 10;
+
+    games.sort(function(a, b){return b - a}); //sort by score (highest score is first)
+
+    if (games.length < 10) { //only display the top 10 scores
+        gamesLen = games.length;
+    }
+
+    games = games.slice(0, gamesLen); //take the top 10 scores (if less than 10, take all of them)
+
+    for (let i = 0; i < games.length; i++) {
+        var row = document.createElement("tr");
+
+        var rowNum = document.createElement("td");
+        rowNum.innerHTML = "Game " + String(i + 1);
+
+        var result = document.createElement("td");
+        result.innerHTML = games[i];
+
+        row.appendChild(rowNum);
+        row.appendChild(result);
+        gamesTable.appendChild(row);
+        
+        popup.replaceChild(gamesTable, popup.children[2]); //replace the original table with the new table
+    }
+}
+
+function generatePlayArea() {
+    document.getElementsByClassName("play-area")[0].innerHTML = `
+    <div class="round">
+            <h1>Round <span class="round-number">1</span></h1>
+            <table class="gameboard">
+                <tr>
+                    <td>
+                        <div class="dice"></div>
+                        <button onclick="keep(0)">Keep</button>
+                    </td>
+                    <td>
+                        <div class="dice"></div>
+                        <button onclick="keep(1)">Keep</button>
+                    </td>
+                    <td>
+                        <div class="dice"></div>
+                        <button onclick="keep(2)">Keep</button>
+                    </td>
+                    <td>
+                        <div class="dice"></div>
+                        <button onclick="keep(3)">Keep</button>
+                    </td>
+                    <td>
+                        <div class="dice"></div>
+                        <button onclick="keep(4)">Keep</button>
+                    </td>
+                </tr>
+            </table>
+            <button onclick="roll()">Re-roll</button>
+        </div>
+    `
+}
+
 //used to update the page whenever there is a change in the server
 function update() {
     var xhttp = new XMLHttpRequest();
@@ -195,6 +260,11 @@ function update() {
                 document.getElementById("total-score").innerHTML = totalScore;
                 document.getElementById("upper-score").innerHTML = upperScore;
                 document.getElementById("rolls").innerHTML = rollsLeft;
+
+                if (gameOver) {
+                    show("endingScreen");
+                    displayAllGames(games);
+                }
             }
             catch (error) {
                 console.log("Ran into an error while updating:", error);
@@ -230,6 +300,33 @@ function submitScoreCategory(category) {
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("action=submitScoreCategory&category=" + category);
     update(); //update the page
+}
+
+function playAgain() {
+    hide("endingScreen");
+    generatePlayArea();
+    
+    const buttons = document.querySelectorAll('button');
+
+    console.log(buttons);
+
+    buttons.forEach(button => {
+        button.removeAttribute("disabled");
+    });
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "app/models/session.php", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("action=playAgain");
+    update(); //update the page
+}
+
+function show(popup) {
+    document.getElementById(popup).style.display = "block";
+}
+
+function hide(popup) {
+    document.getElementById(popup).style.display = "none";
 }
 
 //onload, display all the rolled dice

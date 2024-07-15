@@ -19,6 +19,7 @@ $_SESSION["upperScore"] = 0;
 $_SESSION["newRound"] = false; //flag to check if a new round has started
 $_SESSION["games"] = [];
 $_SESSION["gameOver"] = false;
+$_SESSION["numGames"] = 1;
 ?>
 
 <!DOCTYPE html>
@@ -216,6 +217,20 @@ $_SESSION["gameOver"] = false;
             </tr>
         </table>
 
+    </div>
+
+    <!-- statistics popup -->
+    <div class="popup-bg" id="endingScreen">
+        <div class="popup">
+            <div class="close-btn" onclick='hide("endingScreen")'>&#x2715;</div>
+            <h1 class="popup-title">Leaderboard</h1>
+            <table class="games-table"></table>
+            <div class="play-again">
+                <button class="play-again-btn" onclick="playAgain()">
+                    Play Again
+                </button>
+            </div>
+        </div>
     </div>
 
     <script src="script.js" type="text/javascript"></script>

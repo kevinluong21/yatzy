@@ -45,6 +45,7 @@ function playAgain() {
     $_SESSION["totalScore"] = 0;
     $_SESSION["upperScore"] = 0;
     $_SESSION["newRound"] = false; //flag to check if a new round has started
+    $_SESSION["gameOver"] = false;
 }
 
 $response = [];
@@ -111,6 +112,7 @@ if (isset($_POST["action"]) && isset($_POST["category"]) && $_POST["action"] == 
 
         if ($game -> getNumRounds() == 15) { //game is over!
             //once the game is over, add the game score to the list
+            $_SESSION["game"] -> setTotalScore($engine -> getTotalScore());
             $_SESSION["games"][] = $_SESSION["game"] -> getTotalScore();
             $_SESSION["gameOver"] = true;
             $_SESSION["newRound"] = false;
@@ -119,6 +121,10 @@ if (isset($_POST["action"]) && isset($_POST["category"]) && $_POST["action"] == 
     catch (Exception $e) {
         echo $e; //make sure to display error message here!!!
     }
+}
+
+if (isset($_POST["action"]) && $_POST["action"] == "playAgain") { //roll all dice that have a status of false
+    playAgain();
 }
 
 header("Content-Type: application/json");
