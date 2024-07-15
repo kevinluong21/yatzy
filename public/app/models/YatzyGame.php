@@ -7,22 +7,32 @@ use Yatzy\Dice;
 
 class YatzyGame {
     private $numRolls;
-    private $dice;
+    private $numRounds;
+    private $dice; //a list of all dice
     private $diceValues;
     private $diceStatus;
     private $totalScore; //total score for the game (calculated in the engine)
 
     public function __construct() {
         $this->numRolls = 0;
-        $this->diceValues = array_fill(0, 5, 0);
-        $this->diceStatus = array_fill(0, 5, false);
+        // $this->diceValues = array_fill(0, 5, 0);
+        // $this->diceStatus = array_fill(0, 5, false);
         $this->totalScore = 0;
+        $this->numRounds = 1;
 
         $this->dice = [];
         $i = 0;
         while ($i < 5) {
             $this->dice[] = new Dice();
             $i++;
+        }
+
+        $this->diceValues = [];
+        $this->diceStatus = [];
+        $i = 0;
+        for ($i = 0; $i < 15; $i++) {
+            $this->diceValues[] = array_fill(0, 5, 0);
+            $this->diceStatus[] = array_fill(0, 5, false);
         }
     }
 
@@ -33,8 +43,8 @@ class YatzyGame {
 
         $i = 0;
         while ($i < 5) {
-            if(!$this->diceStatus[$i]){ //only roll the dice that have a "true" status
-                $this->diceValues[$i] = $this->dice[$i]->roll();
+            if(!$this->diceStatus[$this->numRounds - 1][$i]){ //only roll the dice that have a "false" status
+                $this->diceValues[$this->numRounds - 1][$i] = $this->dice[$i]->roll();
             }
             $i++;
         }
@@ -46,25 +56,25 @@ class YatzyGame {
     }
 
     public function keepDice($i){
-        $this->diceStatus[$i] = true;
+        $this->diceStatus[$this->numRounds - 1][$i] = true;
     }
 
     public function keepAllDice() {
         $i = 0;
         while ($i < 5) {
-            $this->diceStatus[$i] = true;
+            $this->diceStatus[$this->numRounds - 1][$i] = true;
             $i++;
         }
     }
 
     public function rerollDice($i){
-        $this->diceStatus[$i] = false;
+        $this->diceStatus[$this->numRounds - 1][$i] = false;
     }
 
-    public function resetGame(){
+    public function resetGame(){ //UPDATE!
         $this->numRolls = 0;
-        $this->diceValues = array_fill(0, 5, 0);
-        $this->diceStatus = array_fill(0, 5, false);
+        // $this->diceValues = array_fill(0, 5, 0);
+        // $this->diceStatus = array_fill(0, 5, false);
     }
 
     public function getNumRolls() {
@@ -72,10 +82,18 @@ class YatzyGame {
     }
 
     public function getDiceValues() {
-        return $this->diceValues;
+        return $this->diceValues[$this->numRounds - 1]; //only return the dice values for the current round
     }
 
     public function getDiceStatus() {
+        return $this->diceStatus[$this->numRounds - 1]; //only return the dice status for the current round
+    }
+
+    public function getAllDiceValues() {
+        return $this->diceValues;
+    }
+
+    public function getAllDiceStatus() {
         return $this->diceStatus;
     }
 
@@ -85,6 +103,14 @@ class YatzyGame {
 
     public function getTotalScore() {
         return $this->totalScore;
+    }
+
+    public function incrementNumRounds() {
+        $this->numRounds++;
+    }
+
+    public function getNumRounds() {
+        return $this->numRounds;
     }
 }
 ?>

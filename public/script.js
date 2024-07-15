@@ -162,7 +162,8 @@ function update() {
                 var face = response["diceValues"];
                 var status = response["diceStatus"];
                 var categoriesPlayed = response["categoriesPlayed"];
-                var score = response["totalScore"];
+                var totalScore = response["totalScore"];
+                var upperScore = response["upperScore"];
                 var rollsLeft = 3 - response["rolls"];
                 var numRounds = response["numRounds"];
                 var pointsToEarn = response["pointsToEarn"];
@@ -170,13 +171,18 @@ function update() {
 
                 console.log(response);
 
-                for (let i = 0; i < face.length; i++) {
-                    dice[i].innerHTML = generateFace(face[i]);
+                if (newRound) {
+                    addRound(numRounds); //add a new row of dice for the new round
                 }
 
-                for (let i = 0; i < status.length; i++) {
-                    if (status[i]) {
-                        dice[i].style.backgroundColor = "#A5DD9B";
+                console.log(numRounds);
+
+                for (let i = 0; i < numRounds; i++) {
+                    for (let j = 0; j < face[i].length; j++) {
+                        dice[(i * 5) + j].innerHTML = generateFace(face[i][j]);
+                        if (status[i][j]) {
+                            dice[(i * 5) + j].style.backgroundColor = "#A5DD9B";
+                        }
                     }
                 }
 
@@ -188,11 +194,8 @@ function update() {
                     document.getElementsByClassName("points-to-earn")[i].innerHTML = pointsToEarn[i];
                 }
 
-                if (newRound) {
-                    addRound(numRounds);
-                }
-
-                document.getElementById("score").innerHTML = score;
+                document.getElementById("total-score").innerHTML = totalScore;
+                document.getElementById("upper-score").innerHTML = upperScore;
                 document.getElementById("rolls").innerHTML = rollsLeft;
             }
             catch (error) {

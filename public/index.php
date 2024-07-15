@@ -16,6 +16,7 @@ $_SESSION["engine"] = $engine; //store the engine object to the session
 $_SESSION["numRounds"] = 1;
 $_SESSION["categoriesPlayed"] = []; //store all of the categories that the player selects
 $_SESSION["totalScore"] = 0;
+$_SESSION["upperScore"] = 0;
 $_SESSION["newRound"] = false; //flag to check if a new round has started
 
 ?>
@@ -61,12 +62,15 @@ $_SESSION["newRound"] = false; //flag to check if a new round has started
     </div>
     <div class="scoreboard">
         <div class="scorebox">
-            Your Score: <span id="score"></span>
+            Your Total Score: <span id="total-score">0</span>
             <br>
-            Rolls Left For This Round: <span id="rolls"></span>
+            Your Upper Score: <span id="upper-score">0</span>
+            <br>
+            Rolls Left For This Round: <span id="rolls">0</span>
         </div>
         <table class="score-categories">
             <tr>
+                <!-- upper section -->
                 <td>
                     <div class="tooltip">
                         <button class="score-category" id="ones" onclick="submitScoreCategory('ones')">Ones</button>
@@ -123,6 +127,7 @@ $_SESSION["newRound"] = false; //flag to check if a new round has started
                         </span>
                     </div>
                 </td>
+                <!-- lower section -->
                 <td>
                     <div class="tooltip">
                         <button class="score-category" id="one_pair" onclick="submitScoreCategory('one_pair')">One Pair</button>

@@ -15,10 +15,19 @@ function calculatePointsToEarn() {
     $engine = $_SESSION["engine"];
 
     foreach ($GLOBALS["scoreCategories"] as $category) {
-        $pointsToEarn[] = $engine -> turnScore($game, [], $category);
+        $pointsToEarn[] = array_sum($engine -> turnScore($game, [], $category)); //return the sum of the scores (only either the 
+        //upper or lower scores can be greater than 0, so adding them together will just give the score of the upper or lower scores)
     }
 
     return $pointsToEarn;
+}
+
+function addRound() { //start a new round by resetting the dice
+    $game = $_SESSION["game"];
+    $game -> incrementNumRounds(); //increment to indicate a new round has started
+    $game -> resetGame(); //resets for a new round (number of rolls) but maintains the original state
+    $game -> rollDice(); //roll the dice once a new round starts
+    $_SESSION["game"] = $game;
 }
 
 $response = [];
@@ -28,16 +37,23 @@ if (!isset($_SESSION["game"]) || !isset($_SESSION["engine"])) {
 }
 
 if (isset($_POST["action"]) && $_POST["action"] == "getGameStatus") { //remember to update to check if the rest are also set!
-    $response["diceValues"] = $_SESSION["game"] -> getDiceValues();
-    $response["diceStatus"] = $_SESSION["game"] -> getDiceStatus();
-    $response["categoriesPlayed"] = $_SESSION["categoriesPlayed"];
-    $response["totalScore"] = $_SESSION["totalScore"];
-    $response["rolls"] = $_SESSION["game"] -> getNumRolls();
-    $response["numRounds"] = $_SESSION["numRounds"];
-    $response["pointsToEarn"] = calculatePointsToEarn();
     $response["newRound"] = $_SESSION["newRound"];
+    
 
-    $_SESSION["newRound"] = false; //reset the flag if it was true
+    if ($_SESSION["newRound"]) {
+        addRound();
+        $_SESSION["newRound"] = false; //reset the flag if it was true
+    }
+
+    $response["diceValues"] = $_SESSION["game"] -> getAllDiceValues();
+    //change to return ALL of the arrays so that the JS can index for the correct round without having to return multiple versions!
+    $response["diceStatus"] = $_SESSION["game"] -> getAllDiceStatus();
+    $response["categoriesPlayed"] = $_SESSION["categoriesPlayed"];
+    $response["totalScore"] = $_SESSION["engine"] -> getTotalScore();
+    $response["upperScore"] = $_SESSION["engine"] -> getUpperScore();
+    $response["rolls"] = $_SESSION["game"] -> getNumRolls();
+    $response["pointsToEarn"] = calculatePointsToEarn();
+    $response["numRounds"] = $_SESSION["game"] -> getNumRounds();
 }
 
 if (isset($_POST["action"]) && $_POST["action"] == "rollDice") { //roll all dice that have a status of false
@@ -61,10 +77,14 @@ if (isset($_POST["action"]) && isset($_POST["category"]) && $_POST["action"] == 
         $numRounds = $_SESSION["numRounds"];
         $scoreCategory = $_POST["category"];
 
-        $_SESSION["totalScore"] = $engine -> turnScore($game, $categoriesPlayed, $scoreCategory);
+        $scores = $engine -> turnScore($game, $categoriesPlayed, $scoreCategory);
+        $engine -> addUpperScore($scores[0]);
+        $engine -> addLowerScore($scores[1]);
+        $_SESSION["totalScore"] = $engine -> getTotalScore();
+        $_SESSION["upperScore"] = $engine -> getUpperScore();
         $categoriesPlayed[] = $scoreCategory;
-        $game -> keepAllDice(); //once a category is picked, all dice are automatically kept (lcoked from re-rolling)
-        $_SESSION["numRounds"]++; //once a score category is picked, the next round starts
+        $game -> keepAllDice(); //once a category is picked, all dice are automatically kept (locked from re-rolling)
+
         $_SESSION["newRound"] = true; //flag to indicate that a new round has started
 
         $_SESSION["game"] = $game;
@@ -72,7 +92,7 @@ if (isset($_POST["action"]) && isset($_POST["category"]) && $_POST["action"] == 
         $_SESSION["categoriesPlayed"] = $categoriesPlayed;
     }
     catch (Exception $e) {
-        echo $e;
+        echo $e; //make sure to display error message here!!!
     }
 }
 

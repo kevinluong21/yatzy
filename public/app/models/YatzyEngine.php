@@ -6,11 +6,13 @@ use Exception;
 class YatzyEngine {
     private $totalScore;
     private $upperScore;
-    const BONUS = 35; //declare a constant for the bonus
+    private $lowerScore;
+    const BONUS = 50; //declare a constant for the bonus
 
     public function __construct() {
         $this->totalScore = 0;
         $this->upperScore = 0;
+        $this->lowerScore = 0;
     }
 
     public function sumOfSpecificSide($game, $side) {
@@ -60,6 +62,24 @@ class YatzyEngine {
         return $sum;
     }
 
+    public function addUpperScore($score) {
+        $this->upperScore += $score;
+        $this->totalScore += $score;
+    }
+
+    public function getUpperScore() {
+        return $this->upperScore;
+    }
+
+    public function addLowerScore($score) {
+        $this->lowerScore += $score;
+        $this->totalScore += $score;
+    }
+
+    public function getLowerScore() {
+        return $this->lowerScore;
+    }
+
     public function getTotalScore() {
         if ($this->upperScore >= 63) {
             return $this->totalScore + self::BONUS;
@@ -74,77 +94,71 @@ class YatzyEngine {
             throw new Exception("Category already played.");
         }
 
-        $score = 0;
+        $lowerScore = 0;
+        $upperScore = 0;
 
         switch ($scoreCategory) { // Calculate score based on score category
             case "ones":
-                $score = $this->sumOfSpecificSide($game, 1);
-                $this->upperScore += $score;
+                $upperScore = $this->sumOfSpecificSide($game, 1);
                 break;
             case "twos":
-                $score = $this->sumOfSpecificSide($game, 2);
-                $this->upperScore += $score;
+                $upperScore = $this->sumOfSpecificSide($game, 2);
                 break;
             case "threes":
-                $score = $this->sumOfSpecificSide($game, 3);
-                $this->upperScore += $score;
+                $upperScore = $this->sumOfSpecificSide($game, 3);
                 break;
             case "fours":
-                $score = $this->sumOfSpecificSide($game, 4);
-                $this->upperScore += $score;
+                $upperScore = $this->sumOfSpecificSide($game, 4);
                 break;
             case "fives":
-                $score = $this->sumOfSpecificSide($game, 5);
-                $this->upperScore += $score;
+                $upperScore = $this->sumOfSpecificSide($game, 5);
                 break;
             case "sixes":
-                $score = $this->sumOfSpecificSide($game, 6);
-                $this->upperScore += $score;
+                $upperScore = $this->sumOfSpecificSide($game, 6);
                 break;
             case "one_pair":
-                $score = $this->sumOfDuplicates($game, 2);
+                $lowerScore = $this->sumOfDuplicates($game, 2);
                 break;
             case "two_pairs":
-                $score = $this->sumOfDuplicates($game, 2, 2);
+                $lowerScore = $this->sumOfDuplicates($game, 2, 2);
                 break;
             case "three_of_a_kind":
-                $score = $this->sumOfDuplicates($game, 3);
+                $lowerScore = $this->sumOfDuplicates($game, 3);
                 break;
             case "four_of_a_kind":
-                $score = $this->sumOfDuplicates($game, 4);
+                $lowerScore = $this->sumOfDuplicates($game, 4);
                 break;
             case "full_house":
                 $values = $game -> getDiceValues();
                 $frequency = array_count_values($values); //count the number of duplicates for each value
 
                 if (in_array(3, $frequency) && in_array(2, $frequency)) { //if there exists a group of 3 duplicates and 2 duplicates
-                    $score = $this->sumOfAllDice($game);
+                    $lowerScore = $this->sumOfAllDice($game);
                 }
                 break;
             case "small_straight":
                 $values = $game -> getDiceValues();
                 sort($values);
                 if ($values == [1, 2, 3, 4, 5]) { //same values regardless of order
-                    $score = 15;
+                    $lowerScore = 15;
                 }
                 break;
             case "large_straight":
                 $values = $game -> getDiceValues();
                 sort($values);
                 if ($values == [2, 3, 4, 5, 6]) { //same values regardless of order
-                    $score = 20;
+                    $lowerScore = 20;
                 }
                 break;
             case "yatzy":
-                $score = $this->sumOfDuplicates($game, 5);
+                $lowerScore = $this->sumOfDuplicates($game, 5);
                 break;
             case "chance":
-                $score = $this->sumOfAllDice($game);
+                $lowerScore = $this->sumOfAllDice($game);
                 break;
         }
 
-        $this->totalScore += $score;
-        return $score;
+        return [$upperScore, $lowerScore];
     }
 }
 ?>
