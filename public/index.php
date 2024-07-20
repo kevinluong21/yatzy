@@ -32,6 +32,16 @@ $_SESSION["numGames"] = 1;
 </head>
 <body>
     <div class="play-area">
+    <div id="output">--</div>
+        <button id="version">Version</button>
+
+        <script>
+        const output = document.getElementById("output");
+        const version = document.getElementById("version");
+        version.onclick = function(e) {
+        output.innerHTML = "Look up version clicked";
+        }
+        </script>
         <div class="round">
             <h1>Round <span class="round-number">1</span></h1>
             <table class="gameboard">
