@@ -52,6 +52,7 @@ $_SESSION["numGames"] = 1;
             xmlhttp.open("GET", "/api.php", true);
             xmlhttp.send();
         }
+        
         </script>
         <div class="round">
             <h1>Round <span class="round-number">1</span></h1>
