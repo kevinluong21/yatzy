@@ -6,11 +6,19 @@ require_once('_config.php');
 
 use Yatzy\YatzyGame;
 use Yatzy\YatzyEngine;
+use Yatzy\Dice;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 
 session_start();
+
+function jsonReply(Response $response, $data)
+{
+    $payload = json_encode($data);
+    $response->getBody()->write($payload);
+    return $response->withHeader('Content-Type', 'application/json');
+}
 
 $app = AppFactory::create();
 
@@ -35,11 +43,17 @@ $app->get('/', function (Request $request, Response $response, $args) {
 });
 
 $app->get('/api/version', function (Request $request, Response $response, $args) {
-    // fill me in
+    $data = ["version" => "1.0"];
+    return jsonReply($response, $data);
 });
 
 $app->get('/api/roll', function (Request $request, Response $response, $args) {
-    // fill me in
+    $d = new Dice();
+    $die = [];
+    for ($i = 0; $i < 5; $i++) {
+        $die[] = $d->roll();
+    }
+    return jsonReply($response, $die);
 });
 
 $app->run();

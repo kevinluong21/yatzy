@@ -219,9 +219,9 @@
         roll.onclick = async function() {
             let answer = $.ajax({
             type: "GET",
-            url: "api.php?action=roll"
+            url: "/api/roll"
             }).then(function(data) {
-                var face = data.value;
+                var face = data;
 
                 for (let i = 0; i < face.length; i++) {
                     dice[i].innerHTML = generateFace(face[i]);
