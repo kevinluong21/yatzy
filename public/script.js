@@ -285,23 +285,23 @@ function roll() {
     // xhttp.send("action=rollDice");
     // update(); //update the page
 
-    const xmlhttp = new XMLHttpRequest();
+    // const xmlhttp = new XMLHttpRequest();
 
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == XMLHttpRequest.DONE) {
-            if (xmlhttp.status == 200) {
-                var response = JSON.parse(xmlhttp.responseText);
-                var face = response["value"];
+    // xmlhttp.onreadystatechange = function() {
+    //     if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+    //         if (xmlhttp.status == 200) {
+    //             var response = JSON.parse(xmlhttp.responseText);
+    //             var face = response["value"];
 
-                for (let i = 0; i < face.length; i++) {
-                    dice[i].innerHTML = generateFace(face[i]);
-                }
-            }
-        }
-    };
+    //             for (let i = 0; i < face.length; i++) {
+    //                 dice[i].innerHTML = generateFace(face[i]);
+    //             }
+    //         }
+    //     }
+    // };
 
-    xmlhttp.open("GET", "/api.php?action=roll", true);
-    xmlhttp.send();
+    // xmlhttp.open("GET", "/api.php?action=roll", true);
+    // xmlhttp.send();
 }
 
 function keep(i) {

@@ -29,6 +29,7 @@ $_SESSION["numGames"] = 1;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yatzy by JK</title>
     <link href="style.css" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
     <div class="play-area">
@@ -58,7 +59,8 @@ $_SESSION["numGames"] = 1;
                     </td>
                 </tr>
             </table>
-            <button onclick="roll()">Re-roll</button>
+            <!-- <button onclick="roll()" id="roll">Re-roll</button> -->
+            <button id="roll">Re-roll</button>
         </div>
     </div>
     <div class="scoreboard">
@@ -234,5 +236,22 @@ $_SESSION["numGames"] = 1;
     </div>
 
     <script src="script.js" type="text/javascript"></script>
+    <script>
+        var dice = document.getElementsByClassName("dice");
+        var roll = document.getElementById("roll");
+
+        roll.onclick = async function() {
+            let answer = $.ajax({
+            type: "GET",
+            url: "api.php?action=roll"
+            }).then(function(data) {
+                var face = data.value;
+
+                for (let i = 0; i < face.length; i++) {
+                    dice[i].innerHTML = generateFace(face[i]);
+                }
+            });
+        };
+    </script>
 </body>
 </html>
