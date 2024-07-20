@@ -6,7 +6,12 @@ use Yatzy\Dice;
 switch ($_GET["action"] ?? "version") {
 case "roll":
     $d = new Dice();
-    $data = ["value" => $d->roll()];
+    $die = [];
+    for ($i = 0; $i < 5; $i++) {
+        $die[] = $d->roll();
+    }
+
+    $data = ["value" => $die];
     break;
 case "version":
 default:

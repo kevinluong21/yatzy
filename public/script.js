@@ -279,11 +279,29 @@ function update() {
 
 //roll all the dice with a status of false
 function roll() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "app/models/session.php", true);
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("action=rollDice");
-    update(); //update the page
+    // var xhttp = new XMLHttpRequest();
+    // xhttp.open("POST", "app/models/session.php", true);
+    // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    // xhttp.send("action=rollDice");
+    // update(); //update the page
+
+    const xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+            if (xmlhttp.status == 200) {
+                var response = JSON.parse(xmlhttp.responseText);
+                var face = response["value"];
+
+                for (let i = 0; i < face.length; i++) {
+                    dice[i].innerHTML = generateFace(face[i]);
+                }
+            }
+        }
+    };
+
+    xmlhttp.open("GET", "/api.php?action=roll", true);
+    xmlhttp.send();
 }
 
 function keep(i) {
